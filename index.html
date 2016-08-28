@@ -213,7 +213,7 @@ If we want to build images for release we could use a second build job:
 ```yaml
 build_release:
   only:
-    - /^\d\.\d/
+    - /^\d+\.\d+/
   tags:
     - docker-builder
   script:
