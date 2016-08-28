@@ -1,0 +1,46 @@
+
+@import 'https://fonts.googleapis.com/css?family=Inconsolata|Open+Sans';
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.remark-code, .remark-inline-code {
+  font-family: 'Inconsolata';
+}
+
+.created-on {
+  padding-top: 100px;
+  font-size: 16px;
+}
+
+.inverse .remark-slide-number {
+  display: none;
+}
+
+.inverse {
+  background-color: #333;
+  color: #fff;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.head {
+  border-bottom: 2px solid #333;
+  padding-bottom: 15px;
+  margin-bottom: 8px;
+}
+.head h1 {
+  font-size: 24px;
+  margin: 2px;
+}
+.head h2 {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 2px;
+}
+
+code {
+  border-radius: 3px;
+}
+
