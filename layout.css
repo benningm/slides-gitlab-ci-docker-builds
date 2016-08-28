@@ -41,6 +41,16 @@ body {
 }
 
 code {
+  background: #e7e8e2;
   border-radius: 3px;
 }
+
+pre.console {
+  background: #002b36;
+  border-radius: 3px;
+  font-family: 'Ubuntu Mono';
+  color: #fdf6e3;
+  padding: 5px;
+}
+
 

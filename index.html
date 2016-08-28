@@ -4,6 +4,7 @@
     <title>Using Gitlab CI/Registry for automated Docker builds</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="layout.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
   </head>
   <body>
     <textarea id="source">
@@ -18,22 +19,230 @@ Markus Benning
 .head[
   # Agenda
 ]
-1. Introduction
-2. Deep-dive
-3. ...
-
-[NOTE]: Note that you need remark.js alongside this html file, but no internet connection.
+TODO: insert headlines
 ---
 .head[
-  # Introduction
+  # About Gitlab
+]
+TODO: Insert a short intro about gitlab.
+---
+.head[
+  # Setup Gitlab environment
+  ## Overview
+]
+---
+.head[
+  # Setup Gitlab environment
+  ## Starting it up
+]
+This project includes a `docker-compose.yml` file which defines
+a `gitlab` instance and a `runner` using the official gitlab
+images from docker hub.
+
+Fire it up:
+
+```shell
+$ docker-compose up
+```
+---
+.head[
+  # Setup Gitlab environment
+  ## Setting up the Gitlab Server
+]
+Start a shell in the `gitlab` container and edit `/etc/gitlab/gitlab.rb`:
+
+```shell
+$ docker-compose exec gitlab /bin/bash
+root@gitlab:/# vim /etc/gitlab/gitlab.rb
+```
+Set the `external_url` to your hostname:
+
+```ruby
+external_url 'http://dampfhammer:10080'
+```
+
+Also activate to registry service:
+
+```ruby
+registry_external_url 'http://dampfhammer:5005'
+gitlab_rails['registry_enabled'] = true
+```
+
+Save (`:wq`) and activate the changes you made:
+
+```shell
+root@gitlab:/# gitlab-ctl reconfigure
+```
+---
+.head[
+  # Setup Gitlab environment
+  ## Setting up the Gitlab Server
+]
+Navigate your Browser to the new gitlab instance:
+
+http://dampfhammer:10080
+
+and set a password for the `root` user.
+
+Congratulations. You're new gitlab server is ready.
+---
+.head[
+  # Setup Gitlab environment
+  ## Setting up the Runner
+]
+Navigate to "Admin Area (<i class="fa fa-wrench" aria-hidden="true"></i>) / Runner" and copy the registration token.
+
+Start a shell in the `runner` container and execute registration:
+
+```shell
+$ docker-compose exec runner /bin/bash
+root@runner:/# gitlab-runner register
+```
+
+Answer the questions:
+
+ * URL: http://dampfhammer:10080/ci
+ * gitlab-ci token: paste your token
+ * Runner description: runner for docker builds
+ * Tags: docker-builder
+ * Executor: docker
+ * default Docker image: docker:1.11.2 (use same version as docker daemon)
+
+Refresh the `Admin Area` page in your browser. It should list you Runner.
+---
+.head[
+  # Setup Gitlab environment
+  ## Setting up the Runner
+]
+Edit the Runners configuration:
+
+```shell
+root@runner:/# vim /etc/gitlab-runner/config.toml
+```
+
+Pass thru the docker socket by adding a volume for it:
+
+```patch
+---    volumes = ["/cache"]
++++    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/cache"]
+```
+
+The runner will re-read the config file everytime it changes. You dont have to restart it.
+---
+.head[
+  # Setup your personal user account
+]
+Navigate to "Admin Area (<i class="fa fa-wrench" aria-hidden="true"></i>) / New User" and create your personal account.
+
+Since we didn't configure SMTP you wont receive a mail with the link to set your password.
+
+Manually set the password with the `root` account.
+
+Open the user and select "<i class="fa fa-edit" aria-hidden="true"></i> Edit".
+
+After setting a password logout and login with your personal account.
+---
+.head[
+  # Setup a Project (Repository)
+]
+Click "New Project" and create a project. (eg. `vote`)
+
+Add dockerfied (`Dockerfile`) application to the projects git repository.
+
+eg. https://github.com/benningm/vote.git
+
+```shell
+$ git clone https://github.com/benningm/vote.git
+$ cd vote
+$ git remote remove origin
+$ git remote add origin http://dampfhammer:10080/benning/vote.git
+$ git push -u origin master
+```
+
+Reload the project page and check content.
+---
+.head[
+  # Add a build job to the CI
+]
+The CI is configured by creating a `.gitlab-ci.yml` in the root path of your project:
+
+```yaml
+variables:
+  IMAGE_NAME: dampfhammer:5005/benning/vote
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN dampfhammer:5005
+
+build_latest:
+  only:
+    - master
+  tags:
+    - docker-builder
+  script:
+    - docker build -t $IMAGE_NAME:latest .
+    - docker push $IMAGE_NAME:latest
+```
+`add`, `commit` and `push` this file to the repository.
+
+Watch the build live on your Gitlab and check the Registry for the built image.
+---
+.head[
+  # Run your Docker Image
+]
+Authenticate to the registry:
+
+```shell
+$ docker login dampfhammer:5005
+```
+
+Then run your image:
+
+```shell
+$ docker run -p 3000:3000 dampfhammer:5005/benning/vote:latest
+```
+
+Access the application in your web browser:
+
+http://dampfhammer:3000
+---
+.head[
+  # Build versioned releases
+]
+If we want to build images for release we could use a second build job:
+
+```yaml
+build_release:
+  only:
+    - /^\d\.\d/
+  tags:
+    - docker-builder
+  script:
+    - docker build -t $IMAGE_NAME:$CI_BUILD_REF_NAME .
+    - docker push $IMAGE_NAME:$CI_BUILD_REF_NAME
+```
+
+After `commit` and `push` this change tag a version:
+
+```shell
+$ git tag 1.0
+$ git push --tags
+```
+
+Check the build and registry within Gitlab.
+---
+class: inverse
+
+# Thank you for watching! Questions?
+
+Markus Benning &lt;ich@markus.benning.de&gt;
+---
+.head[
+  # Appendix
 ]
 
-```perl
-#!perl
+Further readings:
 
-use Bla;
-
-```
+ * ...
 
     </textarea>
     <script src="remark.min.js" type="text/javascript">
