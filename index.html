@@ -19,12 +19,54 @@ Markus Benning
 .head[
   # Agenda
 ]
-TODO: insert headlines
+1. About Gitlab
+  1. What is Gitlab?
+  1. Community of Enterprise?
+  1. Installation options
+1. Setup Gitlab environment
+  1. Overview
+  1. Starting it up
+  1. Setting up the Gitlab server
+  1. Setting up the Runner
+1. Setup your personal user account
+1. Setup a project
+  1. Create the project in gitlab
+  1. Add a build job to the CI
+1. Run your Docker image
+1. Build versioned releases
 ---
 .head[
   # About Gitlab
+  ## What is Gitlab?
 ]
-TODO: Insert a short intro about gitlab.
+Gitlab is a:
+
+ * git repository server
+ * a rails application
+ * started as a open source Github alternative
+ * more than a Github clone
+---
+.head[
+  # About Gitlab
+  ## Community or Enterprise?
+]
+Theres a Community Edition (CE) and a Enterprise Edition (EE).
+
+The EE has some extra features, but the CE is already very complete.
+
+Development of both versions is done in the public.
+---
+.head[
+  # About Gitlab
+  ## Installation options
+]
+There are prebuild packages for:
+ * Ubuntu
+ * Debian
+ * CentOS
+ * Rasperry PI
+
+And a docker image based on the Ubuntu packages on Docker Hub.
 ---
 .head[
   # Setup Gitlab environment
@@ -143,7 +185,8 @@ Open the user and select "<i class="fa fa-edit" aria-hidden="true"></i> Edit".
 After setting a password logout and login with your personal account.
 ---
 .head[
-  # Setup a Project (Repository)
+  # Setup a Project
+  ## Create the project in gitlab
 ]
 Click "New Project" and create a project. (eg. `vote`)
 
@@ -162,7 +205,8 @@ $ git push -u origin master
 Reload the project page and check content.
 ---
 .head[
-  # Add a build job to the CI
+  # Setup a Project
+  ## Add a build job to the CI
 ]
 The CI is configured by creating a `.gitlab-ci.yml` in the root path of your project:
 
@@ -232,17 +276,26 @@ Check the build and registry within Gitlab.
 ---
 class: inverse
 
-# Thank you for watching! Questions?
+# Thanks
 
-Markus Benning &lt;ich@markus.benning.de&gt;
+For more information please contact:
+
+Markus Benning &lt;<a href="mailto:ich@markusbenning.de">ich@markusbenning.de</a>&gt;
 ---
 .head[
   # Appendix
 ]
 
+Links:
+
+ * [Slides](https://github.com/benningm/slides-gitlab-ci-docker-builds)
+
 Further readings:
 
- * ...
+ * [Gitlab - Using Docker Build](http://docs.gitlab.com/ce/ci/docker/using_docker_build.html)
+ * [Gitlab CI - Quickstart](http://docs.gitlab.com/ce/ci/quick_start/README.html)
+ * [Gitlab CI - .gitlab-ci.yml](http://docs.gitlab.com/ce/ci/yaml/README.html)
+
 
     </textarea>
     <script src="remark.min.js" type="text/javascript">

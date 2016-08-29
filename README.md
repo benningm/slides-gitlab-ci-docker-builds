@@ -8,4 +8,24 @@ This slides have been create for a talk at the Docker Meetup Bamberg:
 
 http://www.meetup.com/de-DE/Docker-Bamberg/events/233279717/?eventId=233279717
 
+## Usage
+
+First clone this repository:
+
+```shell
+$ git clone https://github.com/benningm/slides-gitlab-ci-docker-builds.git
+$ cd slides-gitlab-ci-docker-builds
+```
+
+Install dependencies:
+
+```shell
+$ npm install
+```
+
+Startup the presentation live server:
+
+```shell
+$ grunt serve
+```
 
