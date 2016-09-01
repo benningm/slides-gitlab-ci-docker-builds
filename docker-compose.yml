@@ -1,7 +1,7 @@
 version: '2'
 services:
   slides:
-    build: benningm/grunt-live-server
+    image: benningm/grunt-live-server
     ports:
       - "8000:8000"
       - "35729:35729"
