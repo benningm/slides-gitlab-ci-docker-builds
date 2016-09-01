@@ -1,5 +1,12 @@
 version: '2'
 services:
+  slides:
+    build: benningm/grunt-live-server
+    ports:
+      - "8000:8000"
+      - "35729:35729"
+    volumes:
+      - ".:/web"
   gitlab:
     image: gitlab/gitlab-ce:latest
     hostname: gitlab
@@ -16,8 +23,3 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./runner:/etc/gitlab-runner"
-  grunt:
-    hostname: grunt
-    build: .
-    ports:
-      - "8000:8000"
