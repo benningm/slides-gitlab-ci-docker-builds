@@ -23,9 +23,17 @@ Install dependencies:
 $ npm install
 ```
 
-Startup the presentation live server:
+### Open local files in browser
+
+Navigate your browser to the folder an open `index.html`.
+
+### Start the live web server
+
+Start the presentation live server:
 
 ```shell
-$ grunt serve
+$ docker-compose up -d slides
 ```
+
+And point your browser to `http://localhost:8000`.
 
